@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
     <meta charset="utf-8" />
@@ -17,17 +17,20 @@
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-          <a class="navbar-brand" href="#">Navbar</a>
+            <a class="navbar-brand" href="/">Mimi's gallery</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Home</a>
+                <a class="nav-link active" aria-current="page" href="/">Home</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
+                <a class="nav-link" href="/list">List</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/write">Write</a>
               </li>
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -58,42 +61,11 @@
     <!-- Swiper -->
     <div class="swiper mySwiper">
         <div class="swiper-wrapper">
+          <% for(let i = 0; i < posts.length; i++){ %>
             <div class="swiper-slide">
-                <img src="./img/꿈.jpg" />
+              <img src="/public/image/<%= posts[i].img %>" />
             </div>
-            <div class="swiper-slide">
-                <img src="./img/나무와여인.jpg" />
-            </div>
-            <div class="swiper-slide">
-                <img src="./img/나와마을.jpg" />
-            </div>
-            <div class="swiper-slide">
-                <img src="./img/단오풍정.jpg" />
-            </div>
-            <div class="swiper-slide">
-                <img src="./img/모나리자.jpg" />
-            </div>
-            <div class="swiper-slide">
-                <img src="./img/민중을이끄는여인.jpg" />
-            </div>
-            <div class="swiper-slide">
-                <img src="./img/서당.jpg" />
-            </div>
-            <div class="swiper-slide">
-                <img src="./img/씨름.jpg" />
-            </div>
-            <div class="swiper-slide">
-                <img src="./img/양산든여인.jpg" />
-            </div>
-            <div class="swiper-slide">
-                <img src="./img/언제결혼하니.jpg" />
-            </div>
-            <div class="swiper-slide">
-                <img src="./img/오이와개구리.jpg" />
-            </div>
-            <div class="swiper-slide">
-                <img src="./img/이삭줍기.jpg" />
-            </div>
+          <% } %>
         </div>
         <div class="swiper-pagination"></div>
     </div>

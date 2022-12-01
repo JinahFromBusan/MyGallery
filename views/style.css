@@ -55,24 +55,26 @@ main{
 article{
     width: 90%;
     height: 300px;
-    line-height: 300px;
+    margin-top: 10px;
     display: flex;
 }
 article img{
     width: 200px;
+    border-radius: 20px;
 }
 article div{
     width: 80%;
     margin-left: 20px;
     border: 1px solid gray;
     border-radius: 20px;
+    font-family: "맑은 고딕";
 }
 article h5{
     height: 15%;
-    border: 1px solid red;
-
+    margin-top: 15px;
+    margin-left: 15px;
 }
 article p{
     height: 75%;
-    border: 1px solid red;
+    margin: 0 15px;
 }
