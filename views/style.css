@@ -6,7 +6,6 @@ body {
 
 body {
     background: #212529;
-    /* font-family: Helvetica Neue, Helvetica, Arial, sans-serif; */
     font-family: Georgia, 'Times New Roman', Times, serif;
     font-size: 14px;
     color: #FFF;
@@ -60,10 +59,12 @@ article{
 }
 article img{
     width: 200px;
+    height: 270px;
     border-radius: 20px;
 }
 article div{
     width: 80%;
+    height: 270px;
     margin-left: 20px;
     border: 1px solid gray;
     border-radius: 20px;
@@ -77,4 +78,9 @@ article h5{
 article p{
     height: 75%;
     margin: 0 15px;
+}
+
+/* 상세화면 */
+#detail_main{
+    width: 90%;
 }

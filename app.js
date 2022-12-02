@@ -61,11 +61,11 @@ app.get('/', (req, res) => {
     })
 });
 
-//글쓰기화면 불러오기 설정
+//글쓰기화면
 app.get('/write', (req, res) => {
     res.render("write.ejs");
 })
-//리스트화면 불러오기 설정
+//리스트화면
 app.get('/list', (req, res) => {
     db.collection('post').find().toArray((err, result) => {
         if (err) return console.log(err);
@@ -74,6 +74,24 @@ app.get('/list', (req, res) => {
     });
 });
 
+//상세화면
+app.get('/detail/:id', (req, res) => {
+    db.collection('post').findOne({_id: parseInt(req.params.id)}, (err, result) => {
+        if (err) return console.log(err);
+        console.log(result.img);
+
+        res.sendFile(__dirname + 'public/image' + filename);
+        res.render('detail.ejs', {post : result});
+    });
+});
+
+//수정화면
+app.put('/edit/:id', (req, res) => {
+    db.collection('post').findOne({_id : parseInt(req.params.id)}, (err, result) => {
+        if (err) return console.log(err);
+        res.render('edit.ejs', { post : result});
+    });
+});
 
 app.post('/add', upload.single('imgFile'), (req, res) => {
     db.collection('counter').findOne({name: '게시물갯수'}, (err, result) => {
@@ -92,3 +110,14 @@ app.post('/add', upload.single('imgFile'), (req, res) => {
         });
     });
 });
+
+//삭제요청
+app.delete('/delete', (req, res) => {
+    req.body._id = parseInt(req.body._id);
+    console.log(req.body._id)
+    db.collection('post').deleteOne(req.body, (err, result) => {
+        console.log('삭제완료');
+        res.status(200).send({ message : '삭제완료'});
+        res.redirect('/list');
+    })
+})
