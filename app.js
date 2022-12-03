@@ -52,7 +52,7 @@ app.use(express.json());
 app.use(express.static('views'));
 app.use('/public', express.static(__dirname + '/public'));
 
-//메인화면 불러오기 설정
+//메인화면
 app.get('/', (req, res) => {
     db.collection('post').find().toArray((err, result) => {
         if (err) return console.log(err);
@@ -78,18 +78,17 @@ app.get('/list', (req, res) => {
 app.get('/detail/:id', (req, res) => {
     db.collection('post').findOne({_id: parseInt(req.params.id)}, (err, result) => {
         if (err) return console.log(err);
-        console.log(result.img);
-
+        // console.log(result.img);
         res.sendFile(__dirname + 'public/image' + filename);
         res.render('detail.ejs', {post : result});
     });
 });
 
 //수정화면
-app.put('/edit/:id', (req, res) => {
+app.get('/update', (req, res) => {
     db.collection('post').findOne({_id : parseInt(req.params.id)}, (err, result) => {
         if (err) return console.log(err);
-        res.render('edit.ejs', { post : result});
+        res.render('update.ejs', { post : result});
     });
 });
 
