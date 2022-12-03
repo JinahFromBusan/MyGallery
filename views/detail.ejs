@@ -26,12 +26,15 @@
         max-width: 700px;
         margin: 0 auto;
       }
+      p{
+        white-space: pre-line;
+      }
     </style>
 </head>
 <body>
   <%- include('nav.html') %>
 
-    <main id="detail_main">
+    <main>
       <article>
         <img src="/public/image/<%= post.img %>" alt="" />
         <div>
@@ -39,21 +42,12 @@
           <p><%= post.content %></p>
         </div>
       </article>
-      <button id="btn_update" data-id="<%= post._id %>"  class="btn btn-primary">Update</button>
+      <button id="btn_update" data-id="<%= post._id %>"  class="btn btn-primary" onclick="location.href='/update/<%= post._id %>'">Update</button>
       <button id="btn_delete" data-id="<%= post._id %>"  class="btn btn-primary">Delete</button>
     </main>
 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script>
-      // 업데이트버튼 클릭
-      $('#btn_update').click(function(e){
-        // alert(e.target.dataset.id);
-          $.ajax({
-              method : 'UPDATE',
-              url : '/update',
-              data : { _id : e.target.dataset.id }
-          });
-      });
       // 삭제버튼 클릭
       $('#btn_delete').click(function(e){
           $.ajax({
@@ -61,7 +55,7 @@
               url : '/delete',
               data : { _id : e.target.dataset.id }
           }).done((res) => {
-            alert("삭제완료");
+            alert("삭제되었습니다.");
           }).fail((xhr, textStatus, errorThrown) => {
             console.log(xhr, textStatus, errorThrown);
           });

@@ -12,12 +12,13 @@
 <body>
   <%- include('nav.html') %>
 
-    <form action="/add" id="write_form" method="POST" enctype="multipart/form-data">
+    <form action="/update?_method=PUT" id="write_form" method="POST">
         <div class="mb-3">
             <!-- <label for="formFile" class="form-label">Default file input example</label> -->
-            <input class="form-control" type="file" id="formFile" name="imgFile">
+            <input class="form-control" type="file" id="formFile" name="imgFile" value="/public/image/<%= post.img %>">
         </div>
         <div class="mb-3">
+            <input type="hidden" name="id" value="<%= post._id%>" />
             <label for="exampleFormControlInput1" class="form-label">Title</label>
             <input type="text" class="form-control" id="exampleFormControlInput1" name="title" value="<%= post.title %>">
         </div>

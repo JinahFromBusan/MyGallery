@@ -78,9 +78,6 @@ article h5{
 article p{
     height: 75%;
     margin: 0 15px;
+    /* white-space: pre-line; */
 }
 
-/* 상세화면 */
-#detail_main{
-    width: 90%;
-}
