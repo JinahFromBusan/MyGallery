@@ -68,7 +68,8 @@ mongodb.connect('mongodb+srv://admin:qwer1234@cluster0.xukw2sd.mongodb.net/?retr
 
 //로그인 체크
 app.post('/login', passport.authenticate('local', { 
-    failureRedirect : '/fail' 
+    failureRedirect : '/login',
+    failureMessage : true
 }), (req, res) => {
     res.redirect('/');
 });

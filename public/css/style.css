@@ -81,3 +81,7 @@ article p{
     /* white-space: pre-line; */
 }
 
+/* My Page */
+#mypage > p{
+    font-size: 1.5em;
+}
