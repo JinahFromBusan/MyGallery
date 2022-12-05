@@ -14,12 +14,15 @@
       body{
         background: #212529;
         width: 100%;
+        font-family: Georgia, 'Times New Roman', Times, serif;
+        font-size: 14px;
       }
       main{
         max-width: 1000px;
         color: #FFF;
         text-align: center;
         margin: 20px auto;
+        font-family : '맑은 고딕';
       }
       article > img{
         max-width: 500px;
@@ -48,6 +51,7 @@
       <button id="btn_update" data-id="<%= post._id %>"  class="btn btn-primary" onclick="location.href='/update/<%= post._id %>'">Update</button>
       <button id="btn_delete" data-id="<%= post._id %>"  class="btn btn-primary">Delete</button>
     </main>
-
+    
+  <%- include('footer.html') %>
 </body>
 </html>
