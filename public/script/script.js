@@ -25,3 +25,28 @@ $(document).ready(function(){
     });
 
 })
+
+// index.html >> swiper 설정
+var swiper = new Swiper(".mySwiper", {
+    effect: "coverflow",
+    grabCursor: true,
+    centeredSlides: true,
+    slidesPerView: "auto",
+    coverflowEffect: {
+        rotate: 50,
+        stretch: 0,
+        depth: 100,
+        modifier: 1,
+        slideShadows: false,
+    },
+    // pagination: {
+    //     el: ".swiper-pagination",
+    // },
+    mousewheel: {
+        invert: true,
+    },
+    keyboard: {
+        enabled: true,
+        onlyInViewport: false,
+    },
+});

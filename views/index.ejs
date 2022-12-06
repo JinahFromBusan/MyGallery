@@ -15,51 +15,27 @@
 </head>
 
 <body>
-
-    <%- include('nav.html') %>
-    
-    <header>
-        <h1>Wellcome to Mimi's gallery</h1>
-    </header>
-    <!-- Swiper -->
-    <div class="swiper mySwiper">
-        <div class="swiper-wrapper">
-          <% for(let i = posts.length - 1; i >= 0; i--){ %>
-            <div class="swiper-slide">
-              <img src="/public/image/<%= posts[i].img %>" />
+    <div id="wrap">
+        <%- include('nav.html') %>
+        
+        <header>
+            <h1>Wellcome to Mimi's gallery</h1>
+        </header>
+        <!-- Swiper -->
+        
+        <div class="swiper mySwiper" id="section">
+            <div class="swiper-wrapper">
+            <% for(let i = posts.length - 1; i >= 0; i--){ %>
+                <div class="swiper-slide">
+                <img src="/public/image/<%= posts[i].img %>" />
+                </div>
+            <% } %>
             </div>
-          <% } %>
+            <div class="swiper-pagination"></div>
         </div>
-        <div class="swiper-pagination"></div>
-    </div>
 
-    <%- include('footer.html') %>
-    <!-- Initialize Swiper -->
-    <script>
-        var swiper = new Swiper(".mySwiper", {
-            effect: "coverflow",
-            grabCursor: true,
-            centeredSlides: true,
-            slidesPerView: "auto",
-            coverflowEffect: {
-                rotate: 50,
-                stretch: 0,
-                depth: 100,
-                modifier: 1,
-                slideShadows: false,
-            },
-            // pagination: {
-            //     el: ".swiper-pagination",
-            // },
-            mousewheel: {
-                invert: true,
-            },
-            keyboard: {
-                enabled: true,
-                onlyInViewport: false,
-            },
-        });
-    </script>
+        <%- include('footer.html') %>
+    </div>
 </body>
 
 </html>
