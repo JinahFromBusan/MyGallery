@@ -26,7 +26,6 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
-// app.use('/', require('./routes/get.js'))
 
 // 첨부파일 설정
 let filename;
@@ -53,16 +52,15 @@ let upload = multer({ storage : storage });
 // mongoDB 설정
 let db;
 const dbName = 'gallery';
-mongodb.connect('mongodb+srv://admin:qwer1234@cluster0.xukw2sd.mongodb.net/?retryWrites=true&w=majority', (err, client) => {
+mongodb.connect(process.env.DB_URL, (err, client) => {
     if(err) return console.log("DB연결 : " + err);
 
     db = client.db(dbName);
 
-    app.listen(8888, () => {
-        console.log('run at 8888');
+    app.listen(parseInt(process.env.PORT), () => {
+        console.log('run at ' + process.env.PORT);
     })
 })
-
 
 //로그인 체크
 app.post('/login', passport.authenticate('local', { 
@@ -115,13 +113,14 @@ app.get('/', (req, res) => {
         if (err) return console.log("메인화면 : " + err);
         res.sendFile(__dirname + "/public/image/" + filename);
         res.render('index.ejs', {posts : result });
-    })
+    });
 });
 
 //글쓰기화면
 app.get('/write', chk_Login, (req, res) => {
     res.render("write.ejs");
-})
+});
+
 //리스트화면
 app.get('/list', (req, res) => {
     db.collection('post').find().toArray((err, result) => {
@@ -152,7 +151,7 @@ app.get('/update/:id', chk_Login, (req, res) => {
 //로그인 화면
 app.get('/login', (req, res) => {
     res.render('login.ejs');
-})
+});
 
 //마이페이지 화면
 app.get('/mypage', chk_Login, (req, res) => {
@@ -254,5 +253,5 @@ app.post('/register', (req, res) => {
             res.write("<script>alert('중복된 아이디 입니다.')</script>")
             res.write("<script>window.location='/login'</script>")
         }
-    })
+    });
 });
