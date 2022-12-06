@@ -4,8 +4,6 @@ $(document).ready(function(){
         let search_value = $('#search_input').val();
         window.location.replace('/search?value=' + search_value);
     });
-    // 상세화면 > 수정, 삭제버튼 설정
-    
 
     // 상세화면 > 삭제버튼 클릭
     $('#btn_delete').click(function(e){
@@ -14,15 +12,16 @@ $(document).ready(function(){
             url : '/delete',
             data : { _id : e.target.dataset.id }
         }).done((res) => {
-            alert("삭제되었습니다.");
+            if(res.msg == 'success'){
+                alert(res.msg);
+                location.href='/list';
+            }else{
+                alert('삭제실패! 아이디 확인要');
+                location.href='/login';
+            }
         }).fail((xhr, textStatus, errorThrown) => {
             console.log(xhr, textStatus, errorThrown);
         });
     });
-    // 로그인 화면 
-    // $('#join_form').css('display', 'none');
-    // $('#btn_join').click(function(){
-    //     $('#join_form').css('display', 'block');
-    //     $('#login_form').css('display', 'none');
-    // })
+
 })

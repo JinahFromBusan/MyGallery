@@ -10,12 +10,6 @@ const localStrategy = require('passport-local').Strategy;
 const session = require('express-session');
 require('dotenv').config();
 
-// const mysqldb = mysql.createConnection({
-//     user     : 'root',
-//     password : '1111',
-//     database : 'AWS'
-// });
-
 const app = express();
 
 app.set('view engine', 'ejs');
@@ -25,7 +19,11 @@ app.use(express.json());
 app.use(express.static('views'));
 app.use('/public', express.static(__dirname + '/public'));
 app.use(methodOverride('_method'));
-app.use(session({secret : 'secretCode', resave : true, saveUninitialized : false}));
+app.use(session({
+    secret : 'secretCode', 
+    resave : true, 
+    saveUninitialized : false
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 // app.use('/', require('./routes/get.js'))
@@ -71,7 +69,7 @@ app.post('/login', passport.authenticate('local', {
     failureRedirect : '/login',
     failureMessage : true
 }), (req, res) => {
-    res.redirect('/');
+    res.redirect('/mypage');
 });
 passport.use(new localStrategy({
     usernameField : 'id',
@@ -95,7 +93,7 @@ passport.use(new localStrategy({
 passport.serializeUser((user, done) => {
     done(null, user.id);
 });
-// 세션 정보를 DB에서 검색
+// 세션에 저장된 id를 DB에서 검색
 passport.deserializeUser((id, done) => {
     db.collection('login').findOne({ id : id }, (err, result) => {
         done(null, result);
@@ -190,7 +188,7 @@ app.get('/search', (req, res) => {
 //신규저장
 app.post('/add', upload.single('imgFile'), (req, res) => {
     db.collection('counter').findOne({name: '게시물갯수'}, (err, result) => {
-        // 카운터 불러오기
+        // 게시물 카운터 불러오기
         let totalCnt = result.totalPost;
         let insertData = { 
             _id : totalCnt, 
@@ -235,15 +233,26 @@ app.delete('/delete', chk_Login, (req, res) => {
     }
     db.collection('post').deleteOne(deleteData, (err, result) => {
         if(err) return console.log(err);
-        console.log('삭제완료');
-        res.redirect('/list');
-    });
+        if(result.deletedCount > 0){
+            res.send({'msg' : 'success'});  
+        }else{
+            res.send({'msg' : 'fail'});
+        }
+    }); 
 });
 
 
 // 회원가입
 app.post('/register', (req, res) => {
-    db.collection('login').insertOne({ id : req.body.id, pw : req.body.pw }, (err, result) => {
-        res.redirect('/');
-    });
+    db.collection('login').findOne({ id : req.body.id }, (err, result) => {
+        if(!result.id){
+            db.collection('login').insertOne({ id : req.body.id, pw : req.body.pw }, (err, result) => {
+                res.redirect('/');
+            });
+        }else{
+            res.writeHead(200, {'Content-type' : 'text/html; charset=UTF-8'});
+            res.write("<script>alert('중복된 아이디 입니다.')</script>")
+            res.write("<script>window.location='/login'</script>")
+        }
+    })
 });

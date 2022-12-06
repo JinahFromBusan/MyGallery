@@ -16,15 +16,15 @@
 
 <body>
 
-  <%- include('nav.html') %>
-
+    <%- include('nav.html') %>
+    
     <header>
         <h1>Wellcome to Mimi's gallery</h1>
     </header>
     <!-- Swiper -->
     <div class="swiper mySwiper">
         <div class="swiper-wrapper">
-          <% for(let i = 0; i < posts.length; i++){ %>
+          <% for(let i = posts.length - 1; i >= 0; i--){ %>
             <div class="swiper-slide">
               <img src="/public/image/<%= posts[i].img %>" />
             </div>
