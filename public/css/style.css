@@ -78,6 +78,7 @@ article h5{
 article p{
     height: 75%;
     margin: 0 15px;
+    overflow: hidden;
     /* white-space: pre-line; */
 }
 
