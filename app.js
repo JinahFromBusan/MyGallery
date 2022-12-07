@@ -7,7 +7,7 @@ const methodOverride = require('method-override');
 const passport = require('passport');
 const localStrategy = require('passport-local').Strategy;
 const session = require('express-session');
-const bcrypt = require('bcrypt');
+// const bcrypt = require('bcrypt');
 require('dotenv').config();
 
 const app = express();
@@ -81,10 +81,16 @@ passport.use(new localStrategy({
         if(err) return done(err);
         if(!result) return done(null, false, {message : '존재하지 않는 아이디입니다.'});
 
-        bcrypt.compare(input_pw, result.pw, (err, same) => {
-            if(err) return done(null, false, {message : '비밀번호를 확인해 주세요.'});
-            if(same) return done(null, result);
-        })
+        if(input_pw == result.pw){
+            return done(null, result); 
+        }else{
+            return done(null, false, {message : '비밀번호를 확인해 주세요.'});
+        }
+        
+        // bcrypt.compare(input_pw, result.pw, (err, same) => {
+        //     if(err) return done(null, false, {message : '비밀번호를 확인해 주세요.'});
+        //     if(same) return done(null, result);
+        // })
     });
 }));
 // 세션에 id 저장
@@ -254,8 +260,9 @@ app.delete('/delete', chk_Login, (req, res) => {
 app.post('/register', (req, res) => {
     db.collection('login').findOne({ id : req.body.id }, (err, result) => {
         if(!result){
-            const encryptedPassword = bcrypt.hashSync(req.body.pw, 10);
-            db.collection('login').insertOne({ id : req.body.id, pw : encryptedPassword }, (err, result) => {
+            // const encryptedPassword = bcrypt.hashSync(req.body.pw, 10);
+            // db.collection('login').insertOne({ id : req.body.id, pw : encryptedPassword }, (err, result) => {
+                db.collection('login').insertOne({ id : req.body.id, pw : req.body.pw }, (err, result) => {
                 res.redirect('/');
             });
         }else{
