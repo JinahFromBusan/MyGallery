@@ -111,6 +111,7 @@ function chk_Login(req, res, next){
 app.get('/', (req, res) => {
     db.collection('post').find().toArray((err, result) => {
         if (err) return console.log("메인화면 : " + err);
+        res.sendFile(__dirname + '/public/image/' + filename);
         res.render('index.ejs', {posts : result });
     });
 });
@@ -124,6 +125,7 @@ app.get('/write', chk_Login, (req, res) => {
 app.get('/list', (req, res) => {
     db.collection('post').find().toArray((err, result) => {
         if (err) return console.log("리스트화면 : " + err);
+        res.sendFile(__dirname + '/public/image/' + filename);
         res.render('list.ejs', { posts : result});
     });
 });
@@ -132,6 +134,7 @@ app.get('/list', (req, res) => {
 app.get('/detail/:id', (req, res) => {
     db.collection('post').findOne({_id: parseInt(req.params.id)}, (err, result) => {
         if (err) return console.log("상세화면 : " + err);
+        res.sendFile(__dirname + '/public/image/' + filename);
         res.render('detail.ejs', {post : result});
     });
 });
@@ -250,7 +253,6 @@ app.delete('/delete', chk_Login, (req, res) => {
 // 회원가입
 app.post('/register', (req, res) => {
     db.collection('login').findOne({ id : req.body.id }, (err, result) => {
-        // console.log();
         if(!result){
             const encryptedPassword = bcrypt.hashSync(req.body.pw, 10);
             db.collection('login').insertOne({ id : req.body.id, pw : encryptedPassword }, (err, result) => {
