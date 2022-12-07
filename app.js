@@ -1,6 +1,5 @@
 const express = require('express');
 const mongodb = require('mongodb').MongoClient;
-const mysql = require('mysql');
 const ejs = require('ejs');
 const fs = require('fs');
 const multer = require('multer');
@@ -8,6 +7,7 @@ const methodOverride = require('method-override');
 const passport = require('passport');
 const localStrategy = require('passport-local').Strategy;
 const session = require('express-session');
+const bcrypt = require('bcrypt');
 require('dotenv').config();
 
 const app = express();
@@ -80,11 +80,11 @@ passport.use(new localStrategy({
     }, (err, result) => {
         if(err) return done(err);
         if(!result) return done(null, false, {message : '존재하지 않는 아이디입니다.'});
-        if(input_pw == result.pw){
-            return done(null, result); 
-        }else{
-            return done(null, false, {message : '비밀번호를 확인해 주세요.'});
-        }
+
+        bcrypt.compare(input_pw, result.pw, (err, same) => {
+            if(err) return done(null, false, {message : '비밀번호를 확인해 주세요.'});
+            if(same) return done(null, result);
+        })
     });
 }));
 // 세션에 id 저장
@@ -111,7 +111,6 @@ function chk_Login(req, res, next){
 app.get('/', (req, res) => {
     db.collection('post').find().toArray((err, result) => {
         if (err) return console.log("메인화면 : " + err);
-        res.sendFile(__dirname + "/public/image/" + filename);
         res.render('index.ejs', {posts : result });
     });
 });
@@ -125,7 +124,6 @@ app.get('/write', chk_Login, (req, res) => {
 app.get('/list', (req, res) => {
     db.collection('post').find().toArray((err, result) => {
         if (err) return console.log("리스트화면 : " + err);
-        res.sendFile(__dirname + '/public/image/' + filename);
         res.render('list.ejs', { posts : result});
     });
 });
@@ -134,7 +132,6 @@ app.get('/list', (req, res) => {
 app.get('/detail/:id', (req, res) => {
     db.collection('post').findOne({_id: parseInt(req.params.id)}, (err, result) => {
         if (err) return console.log("상세화면 : " + err);
-        res.sendFile(__dirname + '/public/image/' + filename);
         res.render('detail.ejs', {post : result});
     });
 });
@@ -143,7 +140,7 @@ app.get('/detail/:id', (req, res) => {
 app.get('/update/:id', chk_Login, (req, res) => {
     db.collection('post').findOne({_id : parseInt(req.params.id)}, (err, result) => {
         if (err) return console.log("수정화면 : " + err);
-        res.sendFile(__dirname + '/public/image/' + filename);
+        // res.sendFile(__dirname + '/public/image/' + filename);
         res.render('update.ejs', { post : result});
     });
 });
@@ -178,7 +175,6 @@ app.get('/search', (req, res) => {
     db.collection('post').find({ title : req.query.value }).toArray((err, result) => {
     //db.collection('post').aggregate(search_Conditions).toArray((err, result) => {
         if (err) return console.log("리스트화면 에러 : " + err);
-        res.sendFile(__dirname + '/public/image/' + filename);
         res.render('list.ejs', { posts : result});
     });
 });
@@ -233,19 +229,31 @@ app.delete('/delete', chk_Login, (req, res) => {
     db.collection('post').deleteOne(deleteData, (err, result) => {
         if(err) return console.log(err);
         if(result.deletedCount > 0){
-            res.send({'msg' : 'success'});  
+            // 이미지파일 삭제
+            if(fs.existsSync(__dirname + '/public/image/' + req.body.img)){
+                try{
+                    fs.unlinkSync(__dirname + '/public/image/' + req.body.img);
+                    console.log(req.body.img + '이미지파일 삭제 完');
+                }catch(error){
+                    console.log(error);
+                }
+            }else{
+                console.log("이미지 파일 삭제 실패 : " + __dirname + '/public/image/' + req.body.img);
+            }
+            res.send({'msg' : '삭제완료'});  
         }else{
-            res.send({'msg' : 'fail'});
+            res.send({'msg' : '삭제실패'});
         }
-    }); 
+    });
 });
-
 
 // 회원가입
 app.post('/register', (req, res) => {
     db.collection('login').findOne({ id : req.body.id }, (err, result) => {
-        if(!result.id){
-            db.collection('login').insertOne({ id : req.body.id, pw : req.body.pw }, (err, result) => {
+        // console.log();
+        if(!result){
+            const encryptedPassword = bcrypt.hashSync(req.body.pw, 10);
+            db.collection('login').insertOne({ id : req.body.id, pw : encryptedPassword }, (err, result) => {
                 res.redirect('/');
             });
         }else{

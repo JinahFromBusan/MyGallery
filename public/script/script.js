@@ -10,9 +10,9 @@ $(document).ready(function(){
         $.ajax({
             method : 'DELETE',
             url : '/delete',
-            data : { _id : e.target.dataset.id }
+            data : { _id : e.target.dataset.id, img : e.target.dataset.img }
         }).done((res) => {
-            if(res.msg == 'success'){
+            if(res.msg == '삭제완료'){
                 alert(res.msg);
                 location.href='/list';
             }else{
