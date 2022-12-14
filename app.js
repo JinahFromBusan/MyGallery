@@ -131,7 +131,6 @@ app.get('/write', chk_Login, (req, res) => {
 app.get('/list', (req, res) => {
     db.collection('post').find().toArray((err, result) => {
         if (err) return console.log("리스트화면 : " + err);
-        // res.sendFile(__dirname + '/public/image/' + filename);
         res.render('list.ejs', { posts : result});
     });
 });
@@ -140,7 +139,6 @@ app.get('/list', (req, res) => {
 app.get('/detail/:id', (req, res) => {
     db.collection('post').findOne({_id: parseInt(req.params.id)}, (err, result) => {
         if (err) return console.log("상세화면 : " + err);
-        // res.sendFile(__dirname + '/public/image/' + filename);
         res.render('detail.ejs', {post : result});
     });
 });
@@ -149,7 +147,6 @@ app.get('/detail/:id', (req, res) => {
 app.get('/update/:id', chk_Login, (req, res) => {
     db.collection('post').findOne({_id : parseInt(req.params.id)}, (err, result) => {
         if (err) return console.log("수정화면 : " + err);
-        // res.sendFile(__dirname + '/public/image/' + filename);
         res.render('update.ejs', { post : result});
     });
 });
